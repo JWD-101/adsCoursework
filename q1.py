@@ -18,17 +18,13 @@ def compute_winner(history_A, history_B):
         return('D')
 
 def encode(history):
-    """
-    Given a string representation of a game history, compresses the history.
-
-    Returns a string with the compressed representation of a game history 
-    described in the question.
-    """
     encodedHistory = ""
-    previousTrial = history[0]
-    currentTrialCount = 1
 
-    for trial in history[1::]:
+    history+="S"
+    previousTrial = history[0]
+    currentTrialCount = 0
+
+    for trial in history:
         if trial == previousTrial:
             currentTrialCount += 1
         else:
@@ -36,9 +32,6 @@ def encode(history):
             encodedHistory+=str(currentTrialCount)
             currentTrialCount = 1
         previousTrial = trial
-
-    encodedHistory+=previousTrial
-    encodedHistory+=str(currentTrialCount)
     return(encodedHistory)
 
 def decode(compressed_history):
@@ -52,12 +45,6 @@ def decode(compressed_history):
         return(decodedHistory)
 
 def compute_winner_compressed(compressed_history_A, compressed_history_B):
-    """
-    Compute the winner of a game, given the compressed histories of player A
-    and player B.
-
-    Returns 'A' if player A wins, 'B' if player B wins, and 'D' if a tie. 
-    """
     highestCountA = 0
     for trial in range(0,len(compressed_history_A),2):
         if compressed_history_A[trial] == "H":
@@ -86,6 +73,10 @@ assert(compute_winner('HHTTHHH', 'HHHTTH') == 'D')
 
 assert(encode('HTTH') == 'H1T2H1')
 assert(encode('TTTT') == 'T4')
+assert(encode('TTHHHH') == 'T2H4')
+assert(encode('HHT') == 'H2T1')
+assert(encode('HHHHHTTHH') == 'H5T2H2')
+assert(encode('TTHHTHTH') == 'T2H2T1H1T1H1')
 
 assert(decode('T2') == 'TT')
 assert(decode('T1H2T1') == 'THHT')
