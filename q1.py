@@ -1,29 +1,14 @@
 def compute_winner(history_A, history_B):
-    """
-    Compute the winner of a game, given the histories of player A and player B.
-
-    Returns 'A' if player A wins, 'B' if player B wins, and 'D' if a tie. 
-    """
-    headCountA = 0
-    highestCountA = 0
-    for trial in history_A:
-        if trial == "H":
-            headCountA+=1
-        else:
-            headCountA=0
-        if headCountA > highestCountA:
-                highestCountA = headCountA
-
-    headCountB = 0
-    highestCountB = 0
-    for trial in history_B:
-        if trial == "H":
-            headCountB+=1
-        else:
-            
-            headCountB=0
-        if headCountB > highestCountB:
-                highestCountB = headCountB
+    headRunsA = set(history_A.split("T"))
+    headRunsB = set(history_B.split("T"))
+    highestCountA=0
+    highestCountB=0
+    for run in headRunsA:
+        if len(run)>highestCountA:
+            highestCountA=len(run)
+    for run in headRunsB:
+        if len(run)>highestCountB:
+            highestCountB=len(run)
     
     if highestCountA > highestCountB:
         return('A')
@@ -57,13 +42,6 @@ def encode(history):
     return(encodedHistory)
 
 def decode(compressed_history):
-    """
-    Given a compressed string representation of a game history, 
-    uncompress the history.
-
-    Returns a string with the uncompressed representation of a game history 
-    described in the question
-    """
     trial = compressed_history[0:2:]
     compressed_history = compressed_history[2::]
     if len(compressed_history)!=0:
@@ -102,12 +80,19 @@ def compute_winner_compressed(compressed_history_A, compressed_history_B):
 assert(compute_winner('HHH', 'TTT') == 'A')
 assert(compute_winner('THTH', 'THHT') == 'B')
 assert(compute_winner('HH', 'HH') == 'D')
+assert(compute_winner('HHHTTH', 'TTTHH') == 'A')
+assert(compute_winner('HHHHTHTHHHH', 'THHHHHTHH') == 'B')
+assert(compute_winner('HHTTHHH', 'HHHTTH') == 'D')
 
 assert(encode('HTTH') == 'H1T2H1')
 assert(encode('TTTT') == 'T4')
 
 assert(decode('T2') == 'TT')
 assert(decode('T1H2T1') == 'THHT')
+assert(decode('T2H4') == 'TTHHHH')
+assert(decode('H2T1') == 'HHT')
+assert(decode('H5T2H2') == 'HHHHHTTHH')
+assert(decode('T2H2T1H1T1H1') == 'TTHHTHTH')
 
 assert(compute_winner_compressed('H3', 'T3') == 'A')
 assert(compute_winner_compressed('T1H1T1H1', 'T1H2T1') == 'B')
