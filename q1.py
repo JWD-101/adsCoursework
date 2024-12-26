@@ -64,24 +64,14 @@ def decode(compressed_history):
     Returns a string with the uncompressed representation of a game history 
     described in the question
     """
-    decodedHistory=""
-    for i in range(0,len(compressed_history),2):
-        decodedHistory += compressed_history[i]*int(compressed_history[i+1])
-    return(decodedHistory)
-
-def decodeRecursively(compressed_history):
     trial = compressed_history[0:2:]
     compressed_history = compressed_history[2::]
     if len(compressed_history)!=0:
-        decodedHistory = trial[0]*int(trial[1])+decodeRecursively(compressed_history)
-        print(decodedHistory)
+        decodedHistory = trial[0]*int(trial[1])+decode(compressed_history)
         return(decodedHistory)
     else:
         decodedHistory = trial[0]*int(trial[1])
-        print(decodedHistory)
         return(decodedHistory)
-    
-    
 
 def compute_winner_compressed(compressed_history_A, compressed_history_B):
     """
@@ -118,8 +108,6 @@ assert(encode('TTTT') == 'T4')
 
 assert(decode('T2') == 'TT')
 assert(decode('T1H2T1') == 'THHT')
-
-assert(decodeRecursively('T3H5T2H1') == 'TTTHHHHHTTH')
 
 assert(compute_winner_compressed('H3', 'T3') == 'A')
 assert(compute_winner_compressed('T1H1T1H1', 'T1H2T1') == 'B')
