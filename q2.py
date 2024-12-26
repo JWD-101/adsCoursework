@@ -121,6 +121,16 @@ def convert_to_array_queue(ll_queue):
     f is an int with a value facilitating access to the front of the queue
     r is an int with a value facilitating access to the rear of the queue.
     """
+    A = []
+    nextNode = ll_queue.head
+    while nextNode!=None:
+        A.append(nextNode.data)
+        nextNode = nextNode.next
+    while len(A)!=10:
+        A.append(None)
+    f = ll_queue.head.data
+    r = ll_queue.tail.data
+    return(A,f,r)
 
 # test data
 N1 = Node(3)
