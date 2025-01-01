@@ -36,6 +36,18 @@ def hash_quadratic(d):
     Use quadratic probing (see question for details) to resolve 
     collisions.
     """
+    h = HashTable(17)
+    for key in d:
+        hash = (3*key+5)%17
+        collisionResolved = False
+        j=0
+        while collisionResolved==False:
+            if h.lookup((hash+j*j)%17)=="-":
+                h.add((hash+j*j)%17,key)
+                collisionResolved=True
+            else:
+                j+=1
+    return h
 
 def hash_double(d):
     """Inserts keys from the list d into a hash table and
@@ -47,6 +59,20 @@ def hash_double(d):
     Use double hashing (see question for details) to resolve
     collisions.
     """
+    h = HashTable(17)
+    for key in d:
+        hash = (3*key+5)%17
+        secondHash = 13-(key%13)
+
+        collisionResolved = False
+        j=0
+        while collisionResolved==False:
+            if h.lookup((hash+j*secondHash)%17)=="-":
+                h.add((hash+j*secondHash)%17,key)
+                collisionResolved=True
+            else:
+                j+=1
+    return h
 
 # simple tests
 assert(hash_quadratic([1, 2, 3, 4]).check([4, '-', '-', '-', '-', '-', '-', '-', 1, '-', '-', 2, '-', '-', 3, '-', '-']))
