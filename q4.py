@@ -15,8 +15,10 @@ def nextTrial(currentSolution,remainingNumbers, orderings):
             orderings.append(copy.deepcopy(currentSolution))
         else:
             for num in remainingNumbers: #for remaining numbers to check, transfers next number into current solution 
-                newCurrentSolution = (copy.deepcopy(currentSolution)).append(num)
-                newRemainingNumbers = copy.deepcopy(remainingNumbers).remove(num)
+                newCurrentSolution = copy.deepcopy(currentSolution)
+                newRemainingNumbers = copy.deepcopy(remainingNumbers)
+                newCurrentSolution.append(num)
+                newRemainingNumbers.remove(num)
                 nextTrial(newCurrentSolution,newRemainingNumbers,orderings) #repeats on the new current solution
     return orderings
 
@@ -32,7 +34,6 @@ def isBoldenHouseDifferences(currentSolution):
 
         for i in range(1,length):
             differences.append((currentSolution[i]-currentSolution[i-1])%length)
-
         return isMonotoneIncreasing(differences)
     
 def isMonotoneIncreasing(D):
@@ -43,7 +44,7 @@ def isMonotoneIncreasing(D):
         if D[d] < previous:
             return False
         else:
-            previous=d
+            previous=D[d]
     return True
 
 
@@ -51,9 +52,9 @@ def ordering(k):
     """
     Returns a Boldon House ordering of size k.
     """
+
 # simple test for all_orderings(k) only
 # you do not have to return the Boldon House orderings in exactly the same order as they appear in this test case
 
 assert(set(tuple(o) for o in all_orderings(3)) == 
        set(tuple(o) for o in [[0, 2, 1], [0, 1, 2], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]]))
-print(all_orderings(4))
