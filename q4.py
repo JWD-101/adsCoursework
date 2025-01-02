@@ -1,3 +1,4 @@
+import copy
 def all_orderings(k):
     """
     Returns a list of all Boldon House orderings of size k.
@@ -5,37 +6,35 @@ def all_orderings(k):
     remainingNumbers=[]
     for num in range(0,k):
         remainingNumbers.append(num)
-    recursion([],remainingNumbers,[])
+    return nextTrial([],remainingNumbers,[])
 
-def recursion(currentsolution, remainingNumbers, totalSolutions):
-    if isBoldenHouse(currentsolution):
+def nextTrial(currentSolution,remainingNumbers, orderings):
+    print(currentSolution)
+    if isBoldenHouse(currentSolution):
         if len(remainingNumbers)==0:
-            totalSolutions.append(currentsolution)
-            print(totalSolutions)
+            orderings.append(copy.deepcopy(currentSolution))
         else:
             for num in remainingNumbers:
-                currentsolution.append(num)
-                remainingNumbers.remove(num)
-                recursion(currentsolution)   
+                nextSolution = copy.deepcopy(currentSolution)
+                newRemainingNumbers = copy.deepcopy(remainingNumbers)
+                nextSolution.append(num)
+                newRemainingNumbers.remove(num)
+                nextTrial(nextSolution,newRemainingNumbers,orderings)
+    return orderings
 
-
-
-def ordering(k):
-    """
-    Returns a Boldon House ordering of size k.
-    """
-    R = []
-
-def isBoldenHouse(R):
-    D=[]
-    k=len(R)
-    for i in range(1,k):
-        D.append((R[i]-R[i-1])%k)
-    
-    if isMonotoneIncreasing(D):
+def isBoldenHouse(currentSolution):
+    if len(currentSolution)<=2:
         return True
     else:
-        return False
+        differences=[]
+        k=len(currentSolution)
+        for i in range(1,k):
+            differences.append((currentSolution[i]-currentSolution[i-1])%k)
+
+        if isMonotoneIncreasing(differences):
+            return True
+        else:
+            return False
     
 def isMonotoneIncreasing(D):
     previousDifference = D[0]
@@ -46,8 +45,14 @@ def isMonotoneIncreasing(D):
             previousDifference=difference
     return True
 
+
+def ordering(k):
+    """
+    Returns a Boldon House ordering of size k.
+    """
 # simple test for all_orderings(k) only
 # you do not have to return the Boldon House orderings in exactly the same order as they appear in this test case
 
 assert(set(tuple(o) for o in all_orderings(3)) == 
        set(tuple(o) for o in [[0, 2, 1], [0, 1, 2], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]]))
+print(all_orderings(4))
