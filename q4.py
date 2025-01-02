@@ -39,7 +39,6 @@ def isBoldenHouseDifferences(currentSolution):
 def isMonotoneIncreasing(D):
     #function checks if a set is monotonically increasing
     previous = D[0]
-
     for d in range(1,len(D)):
         if D[d] < previous:
             return False
@@ -58,3 +57,5 @@ def ordering(k):
 
 assert(set(tuple(o) for o in all_orderings(3)) == 
        set(tuple(o) for o in [[0, 2, 1], [0, 1, 2], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]]))
+
+print(all_orderings(6))
