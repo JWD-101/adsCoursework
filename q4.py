@@ -3,46 +3,47 @@ def all_orderings(k):
     """
     Returns a list of all Boldon House orderings of size k.
     """
+    #creates a list of numbers that will be permuted to form the Bolden House orderings
     remainingNumbers=[]
     for num in range(0,k):
         remainingNumbers.append(num)
-    return nextTrial([],remainingNumbers,[])
+    return nextTrial([],remainingNumbers,[]) #begins the search with ALL possible numbers < k still to be checked
 
 def nextTrial(currentSolution,remainingNumbers, orderings):
-    print(currentSolution)
-    if isBoldenHouse(currentSolution):
-        if len(remainingNumbers)==0:
+    if isBoldenHouseDifferences(currentSolution): #checks if the current solution is a bolden house
+        if len(remainingNumbers)==0: #no numbers remaining to check = completed bolden house
             orderings.append(copy.deepcopy(currentSolution))
         else:
-            for num in remainingNumbers:
-                nextSolution = copy.deepcopy(currentSolution)
-                newRemainingNumbers = copy.deepcopy(remainingNumbers)
-                nextSolution.append(num)
-                newRemainingNumbers.remove(num)
-                nextTrial(nextSolution,newRemainingNumbers,orderings)
+            for num in remainingNumbers: #for remaining numbers to check, transfers next number into current solution 
+                newCurrentSolution = (copy.deepcopy(currentSolution)).append(num)
+                newRemainingNumbers = copy.deepcopy(remainingNumbers).remove(num)
+                nextTrial(newCurrentSolution,newRemainingNumbers,orderings) #repeats on the new current solution
     return orderings
 
-def isBoldenHouse(currentSolution):
+def isBoldenHouseDifferences(currentSolution):
+    #function checks if a set is a Bolden House (in terms of differences, not whether it is a permutation of natural numbers up to k)
     if len(currentSolution)<=2:
+        #any set below length 3 is automatically a Bolden House
         return True
     else:
+        #otherwise, create an array of the differences and check if it is monotonically increasing
         differences=[]
-        k=len(currentSolution)
-        for i in range(1,k):
-            differences.append((currentSolution[i]-currentSolution[i-1])%k)
+        length=len(currentSolution)
 
-        if isMonotoneIncreasing(differences):
-            return True
-        else:
-            return False
+        for i in range(1,length):
+            differences.append((currentSolution[i]-currentSolution[i-1])%length)
+
+        return isMonotoneIncreasing(differences)
     
 def isMonotoneIncreasing(D):
-    previousDifference = D[0]
-    for difference in range(1,len(D)):
-        if D[difference] < previousDifference:
+    #function checks if a set is monotonically increasing
+    previous = D[0]
+
+    for d in range(1,len(D)):
+        if D[d] < previous:
             return False
         else:
-            previousDifference=difference
+            previous=d
     return True
 
 
